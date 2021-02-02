@@ -2,6 +2,8 @@
 // William Fisher
 // Jan. 26, 2021
 
+//TODO: Implement Player Turns and rules, including Win Conditions
+
 #include "header.hpp"
 using std::vector;
 using std::cout;
@@ -51,5 +53,19 @@ void drawBoard()
 
 int main()
 {
-	drawBoard();
+	int turnCount = 1;
+	int playerNum = 1;
+	//while (true)
+	//{
+		drawBoard();
+
+		if (turnCount % 2 == 1)
+			playerNum = 1;
+		else
+			playerNum = 2;
+
+		cout << endl << "It is Player " << playerNum << "'s turn! Pick an " << endl;
+		cout << "available space between 1 and 25!" << endl;
+		turnCount++;
+	//}
 }
