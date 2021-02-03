@@ -8,6 +8,7 @@
 using std::vector;
 using std::cout;
 using std::endl;
+using std::istringstream;
 
 vector<int> board = { 1, 0, 2, 0, 0,
 					  0, 0, 0, 0, 0,
@@ -51,12 +52,46 @@ void drawBoard()
 	}
 }
 
+void playerTurn(int playerNum)
+{
+	//take input from player
+	//check that it is valid input
+	//if it's valid, change that spot in board
+	//to either x's or o's, depending on the playerNum
+	while (true)
+	{
+		int input;
+		std::cin >> input;
+		if (!std::cin)
+		{
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			cout << "Invalid input. Please enter the number of a vacant space." << endl;
+		}
+		else if (input > 0 && input < 26)
+		{
+			if (board[input - 1] == 0)
+			{
+				if (playerNum == 1)
+					board[input - 1] = 1;
+				else
+					board[input - 1] = 2;
+				break;
+			}
+			else
+				cout << "That space is already occupied. Please select a vacant space." << endl;
+		}
+		else
+			cout << "That number is too large. Please select a vacant space between 1 and 25." << endl;
+	}
+}
+
 int main()
 {
 	int turnCount = 1;
 	int playerNum = 1;
-	//while (true)
-	//{
+	while (true)
+	{
 		drawBoard();
 
 		if (turnCount % 2 == 1)
@@ -66,6 +101,7 @@ int main()
 
 		cout << endl << "It is Player " << playerNum << "'s turn! Pick an " << endl;
 		cout << "available space between 1 and 25!" << endl;
+		playerTurn(playerNum);
 		turnCount++;
-	//}
+	}
 }
