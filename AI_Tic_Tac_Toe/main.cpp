@@ -2,7 +2,8 @@
 // William Fisher
 // Jan. 26, 2021
 
-//TODO: Win Conditions
+//TODO: Diagonal Win Conditions, ability to save replays (save each change to board as it happens), make AI
+//also add choice of pvp, pvbot, and botvbot
 
 #include "header.hpp"
 using std::vector;
@@ -97,9 +98,9 @@ bool getResult(const vector<int>& check)
 bool winCheck(vector<int> & board)
 {
 	vector<int> check(5);
+	int ii = 0;
 
 	//Horizontal Check
-	int ii = 0;
 	for (int i = 0; i < 25; i++)
 	{
 		if(i / 5 == ii)
@@ -111,6 +112,25 @@ bool winCheck(vector<int> & board)
 			ii++;
 		}
 	}
+
+	//Vertical Check
+	for (int j = 0; j < 5; j++)
+	{
+		for (int i = 0; i < 25; i++)
+		{
+			if (i % 5 == j)
+				check[i / 5] = board[i];
+			if (i / 5 == 4)
+			{
+				if (getResult(check))
+					return true;
+			}
+		}
+	}
+
+	//Diagonal Check
+	//LOOK AT YOUR NOTE SHEET FOR CLUES
+
 	return false;
 }
 
