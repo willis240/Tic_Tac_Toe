@@ -2,7 +2,7 @@
 // William Fisher
 // Jan. 26, 2021
 
-//TODO: Implement Player Turns and rules, including Win Conditions
+//TODO: Win Conditions
 
 #include "header.hpp"
 using std::vector;
@@ -10,13 +10,7 @@ using std::cout;
 using std::endl;
 using std::istringstream;
 
-vector<int> board = { 1, 0, 2, 0, 0,
-					  0, 0, 0, 0, 0,
-					  0, 0, 0, 0, 0,
-					  0, 0, 0, 0, 0,
-					  0, 0, 0, 0, 0,};
-
-void placeMarker(int slot)
+void placeMarker(int slot, vector<int> & board)
 {
 	if (board[slot] == 2)
 		cout << "o";
@@ -26,7 +20,7 @@ void placeMarker(int slot)
 		cout << " ";
 }
 
-void drawBoard()
+void drawBoard(vector<int> & board)
 {
 	int slot = 0;
 	for (int height = 0; height < 10; height++)
@@ -39,7 +33,7 @@ void drawBoard()
 					cout << "-";
 				else if (width % 5 == 3)
 				{
-					placeMarker(slot);
+					placeMarker(slot, board);
 					slot++;
 				}
 				else if (width % 5 == 0 && width != 0)
@@ -52,12 +46,8 @@ void drawBoard()
 	}
 }
 
-void playerTurn(int playerNum)
+void playerTurn(int playerNum, vector<int> & board)
 {
-	//take input from player
-	//check that it is valid input
-	//if it's valid, change that spot in board
-	//to either x's or o's, depending on the playerNum
 	while (true)
 	{
 		int input;
@@ -86,13 +76,59 @@ void playerTurn(int playerNum)
 	}
 }
 
+bool getResult(const vector<int>& check)
+{
+	if (std::equal(check.begin() + 1, check.end() - 1, check.begin()) || std::equal(check.begin() + 2, check.end(), check.begin() + 1))
+	{
+		if (check[1] == 1)
+		{
+			cout << "Player 1 wins!" << endl;
+			return true;
+		}
+		else if (check[1] == 2)
+		{
+			cout << "Player 2 wins!" << endl;
+			return true;
+		}
+	}
+	return false;
+}
+
+bool winCheck(vector<int> & board)
+{
+	vector<int> check(5);
+
+	//Horizontal Check
+	int ii = 0;
+	for (int i = 0; i < 25; i++)
+	{
+		if(i / 5 == ii)
+			check[i % 5] = board[i];
+		if (i % 5 == 4)
+		{
+			if (getResult(check))
+				return true;
+			ii++;
+		}
+	}
+	return false;
+}
+
 int main()
 {
 	int turnCount = 1;
 	int playerNum = 1;
+	vector<int> board = { 0, 0, 0, 0, 0,
+						  0, 0, 0, 0, 0,
+						  0, 0, 0, 0, 0,
+						  0, 0, 0, 0, 0,
+						  0, 0, 0, 0, 0 };
 	while (true)
 	{
-		drawBoard();
+		drawBoard(board);
+
+		if (winCheck(board))
+			break;
 
 		if (turnCount % 2 == 1)
 			playerNum = 1;
@@ -101,7 +137,7 @@ int main()
 
 		cout << endl << "It is Player " << playerNum << "'s turn! Pick an " << endl;
 		cout << "available space between 1 and 25!" << endl;
-		playerTurn(playerNum);
+		playerTurn(playerNum, board);
 		turnCount++;
 	}
 }
