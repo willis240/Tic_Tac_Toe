@@ -2,7 +2,7 @@
 // William Fisher
 // Jan. 26, 2021
 
-//TODO: Diagonal Win Conditions, ability to save replays (save each change to board as it happens), make AI
+//TODO: Diagonal Win Conditions, Tie conditions, ability to save replays (save each change to board as it happens), make AI
 //also add choice of pvp, pvbot, and botvbot
 
 #include "header.hpp"
@@ -59,7 +59,7 @@ void playerTurn(int playerNum, vector<int> & board)
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 			cout << "Invalid input. Please enter the number of a vacant space." << endl;
 		}
-		else if (input > 0 && input < 26)
+		else if (input > 0 && input < board.size() + 1)
 		{
 			if (board[input - 1] == 0)
 			{
@@ -91,6 +91,16 @@ bool getResult(const vector<int>& check)
 			cout << "Player 2 wins!" << endl;
 			return true;
 		}
+	}
+	return false;
+}
+
+bool tieCheck(vector<int>& board)
+{
+	if (std::find(board.begin(), board.end(), 0) == board.end())
+	{
+		cout << "No spaces left available. It is a draw." << endl;
+		return true;
 	}
 	return false;
 }
@@ -154,6 +164,9 @@ bool winCheck(vector<int> & board)
 			}
 		}
 	}
+
+	if (tieCheck(board))
+		return true;
 
 	return false;
 }
