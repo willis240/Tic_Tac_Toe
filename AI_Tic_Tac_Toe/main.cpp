@@ -129,7 +129,31 @@ bool winCheck(vector<int> & board)
 	}
 
 	//Diagonal Check
-	//LOOK AT YOUR NOTE SHEET FOR CLUES
+	int modResult = 0;
+	for (int j = 0; j < 3; j++)
+	{
+		for (int i = 0; i < 25; i++)
+		{
+			if (i % 6 == modResult)
+				check[i / 6] = board[i];
+			if (i == 24)
+			{
+				if (getResult(check))
+					return true;
+
+				if (j == 0)
+				{
+					modResult = 1;
+					check[4] = 0;
+				}
+				if (j == 1)
+				{
+					modResult = 5;
+					check[4] = 0;
+				}
+			}
+		}
+	}
 
 	return false;
 }
