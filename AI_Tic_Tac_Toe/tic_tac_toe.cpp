@@ -221,18 +221,6 @@ bool winCheck(vector<int>& board)
 
 void turnOrder(int& playerNum, vector<int>& board, const int & choice, const int& turnCount)
 {
-	//Player vs. Player
-	if (choice == 1)
-	{
-		if (turnCount % 2 == 1)
-			playerNum = 1;
-		else
-			playerNum = 2;
-
-		playerTurn(playerNum, board);
-	}
-
-	//Player vs. Bot
 	if (choice == 2)
 	{
 		if (turnCount % 2 == 1)
@@ -240,26 +228,18 @@ void turnOrder(int& playerNum, vector<int>& board, const int & choice, const int
 		else
 			botTurn(playerNum, board);
 	}
-
-	//Bot vs. Bot
-	if (choice == 3)
+	else
 	{
 		if (turnCount % 2 == 1)
 			playerNum = 1;
 		else
 			playerNum = 2;
 
-		botTurn(playerNum, board);
-	}
-
-	//Playback
-	if (choice == 4)
-	{
-		if (turnCount % 2 == 1)
-			playerNum = 1;
-		else
-			playerNum = 2;
-
-		playbackTurn(playerNum, board);
+		if (choice == 1)
+			playerTurn(playerNum, board);
+		if (choice == 3)
+			botTurn(playerNum, board);
+		if (choice == 4)
+			playbackTurn(playerNum, board);
 	}
 }

@@ -1,5 +1,3 @@
-﻿  bot.cpp
-  tic_tac_toe.cpp
+﻿  tic_tac_toe.cpp
 C:\Users\Wilhelm\source\repos\AI_Tic_Tac_Toe\AI_Tic_Tac_Toe\tic_tac_toe.cpp(82,31): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
   AI_Tic_Tac_Toe.vcxproj -> C:\Users\Wilhelm\source\repos\AI_Tic_Tac_Toe\Debug\AI_Tic_Tac_Toe.exe
