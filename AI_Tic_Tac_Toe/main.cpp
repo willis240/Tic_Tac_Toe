@@ -140,29 +140,52 @@ bool winCheck(vector<int> & board)
 
 	//Diagonal Check
 	int modResult = 0;
-	for (int j = 0; j < 3; j++)
+	int moddedNum = 6;
+	int beginNum = 0;
+	int endNum = 25;
+	for (int j = 0; j < 6; j++)
 	{
-		for (int i = 0; i < 25; i++)
+		for (int i = beginNum; i < endNum; i++)
 		{
-			if (i % 6 == modResult)
-				check[i / 6] = board[i];
-			if (i == 24)
+			if (i % moddedNum == modResult)
+			{
+				if (moddedNum == 6)
+					check[i / moddedNum] = board[i];
+				else
+					check[(i - 2) / moddedNum] = board[i];
+			}
+			if (i == (endNum - 1))
 			{
 				if (getResult(check))
 					return true;
-
-				if (j == 0)
-				{
-					modResult = 1;
-					check[4] = 0;
-				}
-				if (j == 1)
-				{
-					modResult = 5;
-					check[4] = 0;
-				}
 			}
 		}
+
+		if (j == 0)
+			modResult = 1;
+		if (j == 1)
+			modResult = 5;
+		if (j == 2)
+		{
+			modResult = 0;
+			moddedNum = 4;
+			beginNum = 4;
+			endNum = 21;
+		}
+		if (j == 3)
+		{
+			modResult = 1;
+			beginNum = 9;
+			endNum = 22;
+		}
+		if (j == 4)
+		{
+			modResult = 3;
+			beginNum = 3;
+			endNum = 16;
+		}
+		if (modResult != 0)
+			check[4] = 0;
 	}
 
 	if (tieCheck(board))
