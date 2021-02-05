@@ -1,9 +1,32 @@
+// tic_tac_toe.cpp
+// William Fisher
+// Feb. 4, 2021
 
 #include "header.hpp"
 using std::vector;
 using std::cout;
 using std::endl;
 using std::istringstream;
+
+int selectMode()
+{
+	while (true)
+	{
+		int input;
+		std::cin >> input;
+
+		if (!std::cin)
+		{
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			cout << "Invalid input. Please input the number of the mode you'd like to select." << endl;
+		}
+		else if (input > 0 && input < 5)
+			return input;
+		else
+			cout << "That number does not correspond to any of the available modes. Please try again." << endl;
+	}
+}
 
 void placeMarker(int slot, vector<int>& board)
 {
@@ -43,6 +66,9 @@ void drawBoard(vector<int>& board)
 
 void playerTurn(int playerNum, vector<int>& board)
 {
+	cout << endl << "It is Player " << playerNum << "'s turn! Pick an " << endl;
+	cout << "available space between 1 and 25!" << endl;
+
 	while (true)
 	{
 		int input;
@@ -67,8 +93,13 @@ void playerTurn(int playerNum, vector<int>& board)
 				cout << "That space is already occupied. Please select a vacant space." << endl;
 		}
 		else
-			cout << "That number is too large. Please select a vacant space between 1 and 25." << endl;
+			cout << "That number does not work. Please select a vacant space between 1 and 25." << endl;
 	}
+}
+
+void playbackTurn(int playerNum, vector<int>& board)
+{
+	cout << "Hey man! I'm a dummy in playbackTurn!" << endl;
 }
 
 bool getResult(const vector<int>& check)
@@ -186,4 +217,49 @@ bool winCheck(vector<int>& board)
 		return true;
 
 	return false;
+}
+
+void turnOrder(int& playerNum, vector<int>& board, const int & choice, const int& turnCount)
+{
+	//Player vs. Player
+	if (choice == 1)
+	{
+		if (turnCount % 2 == 1)
+			playerNum = 1;
+		else
+			playerNum = 2;
+
+		playerTurn(playerNum, board);
+	}
+
+	//Player vs. Bot
+	if (choice == 2)
+	{
+		if (turnCount % 2 == 1)
+			playerTurn(playerNum, board);
+		else
+			botTurn(playerNum, board);
+	}
+
+	//Bot vs. Bot
+	if (choice == 3)
+	{
+		if (turnCount % 2 == 1)
+			playerNum = 1;
+		else
+			playerNum = 2;
+
+		botTurn(playerNum, board);
+	}
+
+	//Playback
+	if (choice == 4)
+	{
+		if (turnCount % 2 == 1)
+			playerNum = 1;
+		else
+			playerNum = 2;
+
+		playbackTurn(playerNum, board);
+	}
 }

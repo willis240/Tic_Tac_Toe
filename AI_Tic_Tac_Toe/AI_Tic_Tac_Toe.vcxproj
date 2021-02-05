@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bot.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="tic_tac_toe.cpp" />
   </ItemGroup>

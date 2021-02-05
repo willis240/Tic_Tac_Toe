@@ -2,7 +2,7 @@
 // William Fisher
 // Jan. 26, 2021
 
-//TODO: Diagonal Win Conditions, Tie conditions, ability to save replays (save each change to board as it happens), make AI
+//TODO: ability to save replays (save each change to board as it happens), make AI
 //also add choice of pvp, pvbot, and botvbot
 
 #include "header.hpp"
@@ -20,6 +20,15 @@ int main()
 						  0, 0, 0, 0, 0,
 						  0, 0, 0, 0, 0,
 						  0, 0, 0, 0, 0 };
+
+	cout << "Welcome to Tic-Tac_Toe!" << endl << endl << "Choose a mode!" << endl << endl;
+	cout << "1: player vs. player" << endl;
+	cout << "2: player vs. bot" << endl;
+	cout << "3: bot vs. bot" << endl;
+	cout << "4: playback saved game" << endl;
+
+	int choice = selectMode();
+
 	while (true)
 	{
 		drawBoard(board);
@@ -27,14 +36,7 @@ int main()
 		if (winCheck(board))
 			break;
 
-		if (turnCount % 2 == 1)
-			playerNum = 1;
-		else
-			playerNum = 2;
-
-		cout << endl << "It is Player " << playerNum << "'s turn! Pick an " << endl;
-		cout << "available space between 1 and 25!" << endl;
-		playerTurn(playerNum, board);
+		turnOrder(playerNum, board, choice, turnCount);
 		turnCount++;
 	}
 }
