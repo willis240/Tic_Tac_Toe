@@ -139,6 +139,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="tic_tac_toe.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header.hpp" />
