@@ -3,7 +3,6 @@
 // Jan. 26, 2021
 
 //TODO: ability to save replays (save each change to board as it happens), make AI
-//also add choice of pvp, pvbot, and botvbot
 
 #include "header.hpp"
 using std::vector;
@@ -21,7 +20,7 @@ int main()
 						  0, 0, 0, 0, 0,
 						  0, 0, 0, 0, 0 };
 
-	cout << "Welcome to Tic-Tac_Toe!" << endl << endl << "Choose a mode!" << endl << endl;
+	cout << "Welcome to Tic-Tac_Toe: 4-In-A-Row!" << endl << endl << "Choose a mode!" << endl << endl;
 	cout << "1: player vs. player" << endl;
 	cout << "2: player vs. bot" << endl;
 	cout << "3: bot vs. bot" << endl;
@@ -35,6 +34,12 @@ int main()
 
 		if (winCheck(board))
 			break;
+
+		/*if (choice == 3)
+		{
+			cout << "Press enter to continue..." << endl;
+			std::getchar();
+		}*/
 
 		turnOrder(playerNum, board, choice, turnCount);
 		turnCount++;

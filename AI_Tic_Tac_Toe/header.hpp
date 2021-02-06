@@ -9,6 +9,7 @@
 #include <vector>
 #include <sstream>
 #include <string>
+#include <random>
 
 int selectMode();
 void placeMarker(int slot, std::vector<int>& board);
