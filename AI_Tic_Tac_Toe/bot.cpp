@@ -9,7 +9,7 @@ using std::vector;
 
 void botTurn(int playerNum, vector<int>& board)
 {
-	cout << "Wow! I'm a dummy in botTurn!" << endl;
+	cout << "It's Bot " << playerNum << "'s turn!" << endl;
 	vector<int> movesList;
 	for (int i = 0; i < board.size(); i++)
 	{
