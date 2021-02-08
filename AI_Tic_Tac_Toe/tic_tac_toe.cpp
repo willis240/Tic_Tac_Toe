@@ -28,7 +28,7 @@ int selectMode()
 	}
 }
 
-void placeMarker(int slot, vector<int>& board)
+void placeMarker(int slot, vector<char>& board)
 {
 	if (board[slot] == 2)
 		cout << "o";
@@ -38,7 +38,7 @@ void placeMarker(int slot, vector<int>& board)
 		cout << " ";
 }
 
-void drawBoard(vector<int>& board)
+void drawBoard(vector<char>& board)
 {
 	int slot = 0;
 	for (int height = 0; height < 10; height++)
@@ -64,7 +64,7 @@ void drawBoard(vector<int>& board)
 	}
 }
 
-void playerTurn(int playerNum, vector<int>& board)
+void playerTurn(int playerNum, vector<char>& board)
 {
 	cout << endl << "It is Player " << playerNum << "'s turn! Pick an " << endl;
 	cout << "available space between 1 and 25!" << endl;
@@ -97,12 +97,12 @@ void playerTurn(int playerNum, vector<int>& board)
 	}
 }
 
-void playbackTurn(int playerNum, vector<int>& board)
+void playbackTurn(int playerNum, vector<char>& board)
 {
 	cout << "Hey man! I'm a dummy in playbackTurn!" << endl;
 }
 
-int getResult(const vector<int>& check)
+int getResult(const vector<char>& check)
 {
 	if (std::equal(check.begin() + 1, check.end() - 1, check.begin()) || std::equal(check.begin() + 2, check.end(), check.begin() + 1))
 	{
@@ -114,7 +114,7 @@ int getResult(const vector<int>& check)
 	return 0;
 }
 
-bool tieCheck(vector<int>& board)
+bool tieCheck(vector<char>& board)
 {
 	if (std::find(board.begin(), board.end(), 0) == board.end())
 		return true;
@@ -122,9 +122,9 @@ bool tieCheck(vector<int>& board)
 	return false;
 }
 
-int winCheck(vector<int>& board)
+int winCheck(vector<char>& board)
 {
-	vector<int> check(5);
+	vector<char> check(5);
 	int ii = 0;
 
 	//Horizontal Check
@@ -134,7 +134,7 @@ int winCheck(vector<int>& board)
 			check[i % 5] = board[i];
 		if (i % 5 == 4)
 		{
-			int result = getResult(check);
+			char result = getResult(check);
 			if (result == 1)
 				return 1;
 			if (result == 2)
@@ -152,7 +152,7 @@ int winCheck(vector<int>& board)
 				check[i / 5] = board[i];
 			if (i / 5 == 4)
 			{
-				int result = getResult(check);
+				char result = getResult(check);
 				if (result == 1)
 					return 1;
 				if (result == 2)
@@ -179,7 +179,7 @@ int winCheck(vector<int>& board)
 			}
 			if (i == (endNum - 1))
 			{
-				int result = getResult(check);
+				char result = getResult(check);
 				if (result == 1)
 					return 1;
 				if (result == 2)
@@ -221,7 +221,7 @@ int winCheck(vector<int>& board)
 	return 0;
 }
 
-void turnOrder(int& playerNum, vector<int>& board, const int & choice, const int& turnCount)
+void turnOrder(int& playerNum, vector<char>& board, const int & choice, const int& turnCount)
 {
 	if (turnCount % 2 == 1)
 	{

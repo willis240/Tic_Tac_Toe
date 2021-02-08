@@ -7,12 +7,12 @@ using std::cout;
 using std::endl;
 using std::vector;
 
-int evalFunc(int & playerNum, vector<int> board)
+int evalFunc(int & playerNum, vector<char> board)
 {
 	return 0;
 }
 
-int minimax(vector<int> & board, int depth, int & playerNum)
+int minimax(vector<char> & board, int depth, int & playerNum)
 {
 	int boardsChecked = 0;
 	int score = std::numeric_limits<int>::max();
@@ -38,7 +38,7 @@ int minimax(vector<int> & board, int depth, int & playerNum)
 	return chosenMove;
 }
 
-int maxSearch(vector<int> & board, int depth, int & playerNum, int & boardsChecked)
+int maxSearch(vector<char> & board, int depth, int & playerNum, int & boardsChecked)
 {
 	int winStatus = winCheck(board);
 	if (winStatus == playerNum) // current bot wins
@@ -71,7 +71,7 @@ int maxSearch(vector<int> & board, int depth, int & playerNum, int & boardsCheck
 		return 10;
 }
 
-int minSearch(vector<int>& board, int depth, int& playerNum, int & boardsChecked)
+int minSearch(vector<char>& board, int depth, int& playerNum, int & boardsChecked)
 {
 	int winStatus = winCheck(board);
 	if (winStatus == playerNum) // current bot wins
@@ -101,7 +101,7 @@ int minSearch(vector<int>& board, int depth, int& playerNum, int & boardsChecked
 		return 10;
 }
 
-void botTurn(int & playerNum, vector<int>& board)
+void botTurn(int & playerNum, vector<char>& board)
 {
 	cout << "It's Player " << playerNum << "'s turn!" << endl;
 

@@ -14,20 +14,20 @@
 
 // tic_tac_toe.cpp
 int selectMode();
-void placeMarker(int slot, std::vector<int>& board);
-void drawBoard(std::vector<int>& board);
-void playerTurn(int playerNum, std::vector<int>& board);
-void playbackTurn(int playerNum, std::vector<int>& board);
-int getResult(const std::vector<int>& check);
-bool tieCheck(std::vector<int>& board);
-int winCheck(std::vector<int>& board);
-void turnOrder(int& playerNum, std::vector<int>& board, const int & choice, const int& turnCount);
+void placeMarker(int slot, std::vector<char>& board);
+void drawBoard(std::vector<char>& board);
+void playerTurn(int playerNum, std::vector<char>& board);
+void playbackTurn(int playerNum, std::vector<char>& board);
+int getResult(const std::vector<char>& check);
+bool tieCheck(std::vector<char>& board);
+int winCheck(std::vector<char>& board);
+void turnOrder(int& playerNum, std::vector<char>& board, const int & choice, const int& turnCount);
 
 // bot.cpp
-int evalFunc(int & playerNum, std::vector<int> board);
-int minimax(std::vector<int> & board, int depth, int & playerNum);
-int maxSearch(std::vector<int> & board, int depth, int& playerNum, int & boardsChecked);
-int minSearch(std::vector<int>& board, int depth, int& playerNum, int & boardsChecked);
-void botTurn(int & playerNum, std::vector<int>& board);
+int evalFunc(int & playerNum, std::vector<char> board);
+int minimax(std::vector<char> & board, int depth, int & playerNum);
+int maxSearch(std::vector<char> & board, int depth, int& playerNum, int & boardsChecked);
+int minSearch(std::vector<char>& board, int depth, int& playerNum, int & boardsChecked);
+void botTurn(int & playerNum, std::vector<char>& board);
 
 #endif

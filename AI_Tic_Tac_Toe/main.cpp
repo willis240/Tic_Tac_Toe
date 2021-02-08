@@ -14,11 +14,11 @@ int main()
 {
 	int turnCount = 1;
 	int playerNum = 1;
-	vector<int> board = { 0, 0, 0, 0, 0,
+	vector<char> board = {0, 0, 0, 0, 0,
 						  0, 0, 0, 0, 0,
 						  0, 0, 0, 0, 0,
 						  0, 0, 0, 0, 0,
-						  0, 0, 0, 0, 0 };
+						  0, 0, 0, 0, 0};
 
 	cout << "Welcome to Tic-Tac_Toe: 4-In-A-Row!" << endl << endl << "Choose a mode!" << endl << endl;
 	cout << "1: player vs. player" << endl;
