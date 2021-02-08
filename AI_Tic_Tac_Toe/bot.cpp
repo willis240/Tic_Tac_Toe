@@ -12,8 +12,9 @@ int evalFunc(int & playerNum, vector<int> board)
 	return 0;
 }
 
-int minimax(vector<int> & board, int depth, bool isMaximizingPlayer, int & playerNum)
+int minimax(vector<int> & board, int depth, int & playerNum)
 {
+	int boardsChecked = 0;
 	int score = std::numeric_limits<int>::max();
 	int chosenMove = 0;
 
@@ -23,7 +24,7 @@ int minimax(vector<int> & board, int depth, bool isMaximizingPlayer, int & playe
 		{
 			board[i] = playerNum;
 
-			int temp = maxSearch(board, depth + 1, playerNum);
+			int temp = maxSearch(board, depth + 1, playerNum, boardsChecked);
 
 			if (temp < score)
 			{
@@ -33,11 +34,11 @@ int minimax(vector<int> & board, int depth, bool isMaximizingPlayer, int & playe
 			board[i] = 0;
 		}
 	}
-
+	cout << "Boards processed: " << boardsChecked << endl;
 	return chosenMove;
 }
 
-int maxSearch(vector<int> & board, int depth, int & playerNum)
+int maxSearch(vector<int> & board, int depth, int & playerNum, int & boardsChecked)
 {
 	int winStatus = winCheck(board);
 	if (winStatus == playerNum) // current bot wins
@@ -46,7 +47,7 @@ int maxSearch(vector<int> & board, int depth, int & playerNum)
 		return 0;
 	else if (winStatus == 0) // game still ongoing
 	{ 
-		if (depth == 3)
+		if (depth == 4)
 			return 0;
 		int score = std::numeric_limits<int>::min();
 
@@ -58,7 +59,8 @@ int maxSearch(vector<int> & board, int depth, int & playerNum)
 					board[i] = 2;
 				else
 					board[i] = 1;
-				score = std::max(score, minSearch(board, depth + 1, playerNum));
+				score = std::max(score, minSearch(board, depth + 1, playerNum, boardsChecked));
+				boardsChecked++;
 				board[i] = 0;
 			}
 		}
@@ -69,7 +71,7 @@ int maxSearch(vector<int> & board, int depth, int & playerNum)
 		return 10;
 }
 
-int minSearch(vector<int>& board, int depth, int& playerNum)
+int minSearch(vector<int>& board, int depth, int& playerNum, int & boardsChecked)
 {
 	int winStatus = winCheck(board);
 	if (winStatus == playerNum) // current bot wins
@@ -78,7 +80,7 @@ int minSearch(vector<int>& board, int depth, int& playerNum)
 		return 0;
 	else if (winStatus == 0) // game still ongoing
 	{
-		if (depth == 3)
+		if (depth == 4)
 			return 0;
 		int score = std::numeric_limits<int>::max();
 
@@ -87,7 +89,8 @@ int minSearch(vector<int>& board, int depth, int& playerNum)
 			if (board[i] == 0)
 			{
 				board[i] = playerNum;
-				score = std::min(score, maxSearch(board, depth + 1, playerNum));
+				score = std::min(score, maxSearch(board, depth + 1, playerNum, boardsChecked));
+				boardsChecked++;
 				board[i] = 0;
 			}
 		}
@@ -102,15 +105,7 @@ void botTurn(int & playerNum, vector<int>& board)
 {
 	cout << "It's Player " << playerNum << "'s turn!" << endl;
 
-	//Stuff for making a random move... Once we have a minimax function, only use
-	//RNG to choose between multiple best possible moves
-
-	//std::random_device random_device;
-	//std::mt19937 engine{ random_device() };
-	//std::uniform_int_distribution<int> dist(0, movesList.size() - 1);
-	//int chosenMove = movesList[dist(engine)];
-
-	int chosenMove = minimax(board, 0, true, playerNum);
+	int chosenMove = minimax(board, 0, playerNum);
 	
 	board[chosenMove] = playerNum;
 }

@@ -12,6 +12,7 @@
 #include <random>
 #include <algorithm>
 
+// tic_tac_toe.cpp
 int selectMode();
 void placeMarker(int slot, std::vector<int>& board);
 void drawBoard(std::vector<int>& board);
@@ -22,10 +23,11 @@ bool tieCheck(std::vector<int>& board);
 int winCheck(std::vector<int>& board);
 void turnOrder(int& playerNum, std::vector<int>& board, const int & choice, const int& turnCount);
 
+// bot.cpp
 int evalFunc(int & playerNum, std::vector<int> board);
-int minimax(std::vector<int> & board, int depth, bool isMaximizingPlayer, int & playerNum);
-int maxSearch(std::vector<int> & board, int depth, int& playerNum);
-int minSearch(std::vector<int>& board, int depth, int& playerNum);
+int minimax(std::vector<int> & board, int depth, int & playerNum);
+int maxSearch(std::vector<int> & board, int depth, int& playerNum, int & boardsChecked);
+int minSearch(std::vector<int>& board, int depth, int& playerNum, int & boardsChecked);
 void botTurn(int & playerNum, std::vector<int>& board);
 
 #endif
