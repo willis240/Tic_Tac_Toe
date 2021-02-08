@@ -200,6 +200,7 @@ int winCheck(vector<int>& board)
 		}
 		if (j == 3)
 		{
+			check[0] = 0;
 			modResult = 1;
 			beginNum = 9;
 			endNum = 22;

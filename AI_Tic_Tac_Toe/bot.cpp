@@ -72,11 +72,11 @@ int maxSearch(vector<int> & board, int depth, int & playerNum)
 int minSearch(vector<int>& board, int depth, int& playerNum)
 {
 	int winStatus = winCheck(board);
-	if (winStatus == playerNum)
+	if (winStatus == playerNum) // current bot wins
 		return -10;
-	else if (winStatus == 3)
+	else if (winStatus == 3) // tie
 		return 0;
-	else if (winStatus == 0)
+	else if (winStatus == 0) // game still ongoing
 	{
 		if (depth == 3)
 			return 0;
@@ -94,7 +94,7 @@ int minSearch(vector<int>& board, int depth, int& playerNum)
 
 		return score;
 	}
-	else
+	else // other player wins
 		return 10;
 }
 

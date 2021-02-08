@@ -2,7 +2,7 @@
 // William Fisher
 // Jan. 26, 2021
 
-//TODO: ability to save replays (save each change to board as it happens), make AI
+//TODO: ability to save replays (save each change to board as it happens)
 
 #include "header.hpp"
 using std::vector;
@@ -49,12 +49,6 @@ int main()
 			cout << "No available spaces left. It is a draw." << endl;
 			break;
 		}
-
-		/*if (choice == 3)
-		{
-			cout << "Press enter to continue..." << endl;
-			std::getchar();
-		}*/
 
 		turnOrder(playerNum, board, choice, turnCount);
 		turnCount++;
