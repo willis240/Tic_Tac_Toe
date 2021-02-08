@@ -102,35 +102,27 @@ void playbackTurn(int playerNum, vector<int>& board)
 	cout << "Hey man! I'm a dummy in playbackTurn!" << endl;
 }
 
-bool getResult(const vector<int>& check)
+int getResult(const vector<int>& check)
 {
 	if (std::equal(check.begin() + 1, check.end() - 1, check.begin()) || std::equal(check.begin() + 2, check.end(), check.begin() + 1))
 	{
 		if (check[1] == 1)
-		{
-			cout << "Player 1 wins!" << endl;
-			return true;
-		}
-		else if (check[1] == 2)
-		{
-			cout << "Player 2 wins!" << endl;
-			return true;
-		}
+			return 1;
+		if (check[1] == 2)
+			return 2;
 	}
-	return false;
+	return 0;
 }
 
 bool tieCheck(vector<int>& board)
 {
 	if (std::find(board.begin(), board.end(), 0) == board.end())
-	{
-		cout << "No spaces left available. It is a draw." << endl;
 		return true;
-	}
+
 	return false;
 }
 
-bool winCheck(vector<int>& board)
+int winCheck(vector<int>& board)
 {
 	vector<int> check(5);
 	int ii = 0;
@@ -142,8 +134,11 @@ bool winCheck(vector<int>& board)
 			check[i % 5] = board[i];
 		if (i % 5 == 4)
 		{
-			if (getResult(check))
-				return true;
+			int result = getResult(check);
+			if (result == 1)
+				return 1;
+			if (result == 2)
+				return 2;
 			ii++;
 		}
 	}
@@ -157,8 +152,11 @@ bool winCheck(vector<int>& board)
 				check[i / 5] = board[i];
 			if (i / 5 == 4)
 			{
-				if (getResult(check))
-					return true;
+				int result = getResult(check);
+				if (result == 1)
+					return 1;
+				if (result == 2)
+					return 2;
 			}
 		}
 	}
@@ -181,8 +179,11 @@ bool winCheck(vector<int>& board)
 			}
 			if (i == (endNum - 1))
 			{
-				if (getResult(check))
-					return true;
+				int result = getResult(check);
+				if (result == 1)
+					return 1;
+				if (result == 2)
+					return 2;
 			}
 		}
 
@@ -214,9 +215,9 @@ bool winCheck(vector<int>& board)
 	}
 
 	if (tieCheck(board))
-		return true;
+		return 3;
 
-	return false;
+	return 0;
 }
 
 void turnOrder(int& playerNum, vector<int>& board, const int & choice, const int& turnCount)

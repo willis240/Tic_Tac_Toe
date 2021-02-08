@@ -32,8 +32,23 @@ int main()
 	{
 		drawBoard(board);
 
-		if (winCheck(board))
+		int result = winCheck(board);
+
+		if (result == 1)
+		{
+			cout << "Player 1 wins!" << endl;
 			break;
+		}
+		if (result == 2)
+		{
+			cout << "Player 2 wins!" << endl;
+			break;
+		}
+		if (result == 3)
+		{
+			cout << "No available spaces left. It is a draw." << endl;
+			break;
+		}
 
 		/*if (choice == 3)
 		{
