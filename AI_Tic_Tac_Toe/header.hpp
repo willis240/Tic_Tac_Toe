@@ -5,12 +5,14 @@
 #ifndef HEADER_HPP
 #define HEADER_HPP
 
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <vector>
 #include <fstream>
 #include <string>
 #include <random>
 #include <algorithm>
+#include <time.h>
 
 // tic_tac_toe.cpp
 int selectMode();

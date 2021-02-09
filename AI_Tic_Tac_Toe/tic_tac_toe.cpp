@@ -99,24 +99,39 @@ void playerTurn(int playerNum, vector<char>& board, vector<int> & movesMade)
 	}
 }
 
+// Gets data from the user-specified save file
 vector<int> getMoveData()
 {
-	std::fstream saveFile;
-	saveFile.open("Saved_games.txt", std::ios::in);
-	if (!saveFile.is_open())
+	bool displayMessage = false;
+	while (true)
 	{
-		cout << "Failed to open file. Closing program." << endl;
-		exit;
-	}
-	vector<int> movesToMake;
-	int move;
-	while (saveFile >> move)
-	{
-		movesToMake.push_back(move);
-	}
-	saveFile.close();
+		
+		std::string fileName;
+		std::ifstream saveFile;
+		getline(std::cin, fileName);
+		saveFile.open(fileName);
 
-	return movesToMake;
+		if (saveFile.is_open())
+		{
+			vector<int> movesToMake;
+			int move;
+			while (saveFile >> move)
+			{
+				movesToMake.push_back(move);
+			}
+			saveFile.close();
+
+			return movesToMake;
+		}
+		cout << "Please enter the name of the file which contains the game you would like to watch." << endl;
+		cout << "Make sure to include \".txt\" at the end." << endl;
+		if (displayMessage)
+		{
+			if (!saveFile.is_open())
+				cout << "Invalid file name. Please try again." << endl;
+		}
+		displayMessage = true;
+	}
 }
 
 void playbackTurn(int playerNum, vector<char>& board, const int & turnCount, vector<int> & moves)
@@ -288,16 +303,25 @@ void askForSave(const vector<int> & movesMade)
 		if (saveInput == "y")
 		{
 			//code that saves movesMade to a file
-			std::ofstream myfile;
-			myfile.open("Saved_games.txt", std::ios::app);
-			if (myfile.is_open())
+			time_t rawtime;
+			struct tm* timeinfo;
+			char buffer[80];
+
+			time(&rawtime);
+			timeinfo = localtime(&rawtime);
+
+			strftime(buffer, 80, "%m-%d-%Y_%H-%M-%S", timeinfo);
+			std::string fileName = std::string(buffer) + ".txt";
+			std::ofstream file;
+			file.open(fileName);
+			if (file.is_open())
 			{
 				for (int i = 0; i < movesMade.size(); i++)
 				{
-					myfile << movesMade[i] << " ";
+					file << movesMade[i] << " ";
 				}
-				myfile.close();
-				cout << "Saved game to Saved_games.txt." << endl << endl << endl << endl;
+				file.close();
+				cout << "Saved game to " << fileName << endl << endl << endl << endl;
 			}
 			else
 				cout << "Failed to open file." << endl;
