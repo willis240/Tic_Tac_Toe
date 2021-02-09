@@ -9,7 +9,6 @@
 using std::vector;
 using std::cout;
 using std::endl;
-using std::istringstream;
 
 int main()
 {
@@ -20,6 +19,8 @@ int main()
 						  0, 0, 0, 0, 0,
 						  0, 0, 0, 0, 0,
 						  0, 0, 0, 0, 0};
+
+	vector<int> movesMade;
 
 	cout << "Welcome to Tic-Tac_Toe: 4-In-A-Row!" << endl << endl << "Choose a mode!" << endl << endl;
 	cout << "1: player vs. player" << endl;
@@ -51,7 +52,11 @@ int main()
 			break;
 		}
 
-		turnOrder(playerNum, board, choice, turnCount);
+		turnOrder(playerNum, board, choice, turnCount, movesMade);
 		turnCount++;
 	}
+
+	if (choice != 4)
+		askForSave(movesMade);
+
 }

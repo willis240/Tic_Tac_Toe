@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <vector>
-#include <sstream>
+#include <fstream>
 #include <string>
 #include <random>
 #include <algorithm>
@@ -16,18 +16,20 @@
 int selectMode();
 void placeMarker(int slot, std::vector<char>& board);
 void drawBoard(std::vector<char>& board);
-void playerTurn(int playerNum, std::vector<char>& board);
-void playbackTurn(int playerNum, std::vector<char>& board);
+void playerTurn(int playerNum, std::vector<char>& board, std::vector<int>& movesMade);
+void playbackTurn(int playerNum, std::vector<char>& board, const int & turnCount);
 int getResult(const std::vector<char>& check);
 bool tieCheck(std::vector<char>& board);
 int winCheck(std::vector<char>& board);
-void turnOrder(int& playerNum, std::vector<char>& board, const int & choice, const int& turnCount);
+void turnOrder(int& playerNum, std::vector<char>& board, const int & choice, const int& turnCount,
+    std::vector<int>& movesMade);
+void askForSave(const std::vector<int>& movesMade);
 
 // bot.cpp
 int evalFunc(int & playerNum, std::vector<char> board);
 int minimax(std::vector<char> & board, int depth, int & playerNum);
 int maxSearch(std::vector<char> & board, int depth, int& playerNum, int & boardsChecked);
 int minSearch(std::vector<char>& board, int depth, int& playerNum, int & boardsChecked);
-void botTurn(int & playerNum, std::vector<char>& board);
+void botTurn(int & playerNum, std::vector<char>& board, std::vector<int>& movesMade);
 
 #endif

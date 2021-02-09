@@ -64,7 +64,7 @@ void drawBoard(vector<char>& board)
 	}
 }
 
-void playerTurn(int playerNum, vector<char>& board)
+void playerTurn(int playerNum, vector<char>& board, vector<int> & movesMade)
 {
 	cout << endl << "It is Player " << playerNum << "'s turn! Pick an " << endl;
 	cout << "available space between 1 and 25!" << endl;
@@ -87,6 +87,8 @@ void playerTurn(int playerNum, vector<char>& board)
 					board[input - 1] = 1;
 				else
 					board[input - 1] = 2;
+
+				movesMade.push_back(input - 1);
 				break;
 			}
 			else
@@ -97,9 +99,31 @@ void playerTurn(int playerNum, vector<char>& board)
 	}
 }
 
-void playbackTurn(int playerNum, vector<char>& board)
+void playbackTurn(int playerNum, vector<char>& board, const int & turnCount)
 {
 	cout << "Hey man! I'm a dummy in playbackTurn!" << endl;
+	if (turnCount == 1)
+	{
+		std::fstream saveFile;
+		saveFile.open("Saved_games.txt", std::ios::in);
+		if (!saveFile.is_open())
+		{
+			cout << "Failed to open file. Closing program." << endl;
+			exit;
+		}
+		vector<int> movesToMake;
+		int move;
+		while (saveFile >> move)
+		{
+			movesToMake.push_back(move);
+		}
+		saveFile.close();
+		for (int i = 0; i < movesToMake.size(); i++)
+			cout << movesToMake[i] << " ";
+	}
+
+
+
 }
 
 int getResult(const vector<char>& check)
@@ -221,29 +245,67 @@ int winCheck(vector<char>& board)
 	return 0;
 }
 
-void turnOrder(int& playerNum, vector<char>& board, const int & choice, const int& turnCount)
+void turnOrder(int& playerNum, vector<char>& board, const int & choice, const int& turnCount,
+	vector<int> & movesMade)
 {
 	if (turnCount % 2 == 1)
 	{
 		playerNum = 1;
 		if (choice == 2)
-			playerTurn(playerNum, board);
+			playerTurn(playerNum, board, movesMade);
 	}
 	else 
 	{
 		playerNum = 2;
 		if (choice == 2)
-			botTurn(playerNum, board);
+			botTurn(playerNum, board, movesMade);
 	}
 
 	if (choice == 1)
-		playerTurn(playerNum, board);
+		playerTurn(playerNum, board, movesMade);
 	if (choice == 3)
 	{
-		botTurn(playerNum, board);
+		botTurn(playerNum, board, movesMade);
 		cout << "Press enter to continue..." << endl;
 		std::getchar();
 	}
 	if (choice == 4)
-		playbackTurn(playerNum, board);
+	{
+		playbackTurn(playerNum, board, turnCount);
+		cout << "Press enter to continue..." << endl;
+		std::getchar();
+	}
+}
+
+void askForSave(const vector<int> & movesMade)
+{
+	while (true)
+	{
+		std::string saveInput;
+		cout << "Would you like to save this game so you can watch it again later?" << endl;
+		cout << "Type \"y\" for yes or \"n\" for no" << endl;
+		std::cin >> saveInput;
+		if (saveInput == "y")
+		{
+			//code that saves movesMade to a file
+			std::ofstream myfile;
+			myfile.open("Saved_games.txt", std::ios::app);
+			if (myfile.is_open())
+			{
+				for (int i = 0; i < movesMade.size(); i++)
+				{
+					myfile << movesMade[i] << " ";
+				}
+				myfile.close();
+				cout << "Saved game to Saved_games.txt." << endl;
+			}
+			else
+				cout << "Failed to open file." << endl;
+			break;
+		}
+		else if (saveInput == "n")
+			break;
+		else
+			cout << "Invalid input. Please only type either \"y\" for yes or \"n\" for no" << endl;
+	}
 }

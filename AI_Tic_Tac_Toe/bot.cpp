@@ -120,11 +120,12 @@ int minSearch(vector<char>& board, int depth, int& playerNum, int & boardsChecke
 		return 10;
 }
 
-void botTurn(int & playerNum, vector<char>& board)
+void botTurn(int & playerNum, vector<char>& board, vector<int> & movesMade)
 {
 	cout << "It's Player " << playerNum << "'s turn!" << endl;
 
 	int chosenMove = minimax(board, 0, playerNum);
 	
 	board[chosenMove] = playerNum;
+	movesMade.push_back(chosenMove);
 }
