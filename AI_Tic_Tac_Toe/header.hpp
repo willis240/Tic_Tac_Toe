@@ -17,12 +17,13 @@ int selectMode();
 void placeMarker(int slot, std::vector<char>& board);
 void drawBoard(std::vector<char>& board);
 void playerTurn(int playerNum, std::vector<char>& board, std::vector<int>& movesMade);
-void playbackTurn(int playerNum, std::vector<char>& board, const int & turnCount);
+std::vector<int> getMoveData();
+void playbackTurn(int playerNum, std::vector<char>& board, const int & turnCount, std::vector<int> & moves);
 int getResult(const std::vector<char>& check);
 bool tieCheck(std::vector<char>& board);
 int winCheck(std::vector<char>& board);
 void turnOrder(int& playerNum, std::vector<char>& board, const int & choice, const int& turnCount,
-    std::vector<int>& movesMade);
+    std::vector<int>& movesMade, std::vector<int> & moves);
 void askForSave(const std::vector<int>& movesMade);
 
 // bot.cpp

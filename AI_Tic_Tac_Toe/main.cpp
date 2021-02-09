@@ -29,6 +29,10 @@ int main()
 	cout << "4: playback saved game" << endl;
 
 	int choice = selectMode();
+	
+	vector<int> moves;
+	if (choice == 4)
+		moves = getMoveData();
 
 	while (true)
 	{
@@ -51,8 +55,7 @@ int main()
 			cout << "No available spaces left. It is a draw." << endl;
 			break;
 		}
-
-		turnOrder(playerNum, board, choice, turnCount, movesMade);
+		turnOrder(playerNum, board, choice, turnCount, movesMade, moves);
 		turnCount++;
 	}
 

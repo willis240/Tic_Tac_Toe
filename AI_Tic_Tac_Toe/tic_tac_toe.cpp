@@ -99,31 +99,30 @@ void playerTurn(int playerNum, vector<char>& board, vector<int> & movesMade)
 	}
 }
 
-void playbackTurn(int playerNum, vector<char>& board, const int & turnCount)
+vector<int> getMoveData()
+{
+	std::fstream saveFile;
+	saveFile.open("Saved_games.txt", std::ios::in);
+	if (!saveFile.is_open())
+	{
+		cout << "Failed to open file. Closing program." << endl;
+		exit;
+	}
+	vector<int> movesToMake;
+	int move;
+	while (saveFile >> move)
+	{
+		movesToMake.push_back(move);
+	}
+	saveFile.close();
+
+	return movesToMake;
+}
+
+void playbackTurn(int playerNum, vector<char>& board, const int & turnCount, vector<int> & moves)
 {
 	cout << "Hey man! I'm a dummy in playbackTurn!" << endl;
-	if (turnCount == 1)
-	{
-		std::fstream saveFile;
-		saveFile.open("Saved_games.txt", std::ios::in);
-		if (!saveFile.is_open())
-		{
-			cout << "Failed to open file. Closing program." << endl;
-			exit;
-		}
-		vector<int> movesToMake;
-		int move;
-		while (saveFile >> move)
-		{
-			movesToMake.push_back(move);
-		}
-		saveFile.close();
-		for (int i = 0; i < movesToMake.size(); i++)
-			cout << movesToMake[i] << " ";
-	}
-
-
-
+	board[moves[turnCount - 1]] = playerNum;
 }
 
 int getResult(const vector<char>& check)
@@ -246,7 +245,7 @@ int winCheck(vector<char>& board)
 }
 
 void turnOrder(int& playerNum, vector<char>& board, const int & choice, const int& turnCount,
-	vector<int> & movesMade)
+	vector<int> & movesMade, vector<int> & moves)
 {
 	if (turnCount % 2 == 1)
 	{
@@ -271,7 +270,7 @@ void turnOrder(int& playerNum, vector<char>& board, const int & choice, const in
 	}
 	if (choice == 4)
 	{
-		playbackTurn(playerNum, board, turnCount);
+		playbackTurn(playerNum, board, turnCount, moves);
 		cout << "Press enter to continue..." << endl;
 		std::getchar();
 	}
