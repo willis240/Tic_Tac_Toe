@@ -7,6 +7,8 @@ using std::cout;
 using std::endl;
 using std::vector;
 
+const int maxDepth = 4;
+
 int evalFunc(int & playerNum, vector<char> board)
 {
 	int points = 0;
@@ -56,9 +58,13 @@ int maxSearch(vector<char> & board, int depth, int & playerNum, int & boardsChec
 		return 0;
 	else if (winStatus == 0) // game still ongoing
 	{ 
-		if (depth == 4)
-			return 0;
 		int score = std::numeric_limits<int>::min();
+
+		if (depth == maxDepth)
+		{
+			score = std::max(score, evalFunc(playerNum, board));
+			return score;
+		}
 
 		for (int i = 0; i < board.size(); i++)
 		{
@@ -91,13 +97,9 @@ int minSearch(vector<char>& board, int depth, int& playerNum, int & boardsChecke
 	{
 		int score = std::numeric_limits<int>::max();
 
-		if (depth == 4)
+		if (depth == maxDepth)
 		{
-			
 			score = std::min(score, evalFunc(playerNum, board));
-			//if (board[23] == playerNum)
-				//score = -5;
-			
 			return score;
 		}
 
