@@ -2,7 +2,8 @@
 // William Fisher
 // Jan. 26, 2021
 
-//TODO: ability to save replays (save each change to board as it happens)
+//TODO: make eval function (apply only to leafs) which prioritizes spaces in open centers, 
+//add ability to save replays (save each change to board as it happens)
 
 #include "header.hpp"
 using std::vector;
