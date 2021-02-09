@@ -21,7 +21,7 @@ int selectMode()
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 			cout << "Invalid input. Please input the number of the mode you'd like to select." << endl;
 		}
-		else if (input > 0 && input < 5)
+		else if (input > 0 && input < 6)
 			return input;
 		else
 			cout << "That number does not correspond to any of the available modes. Please try again." << endl;
@@ -297,14 +297,17 @@ void askForSave(const vector<int> & movesMade)
 					myfile << movesMade[i] << " ";
 				}
 				myfile.close();
-				cout << "Saved game to Saved_games.txt." << endl;
+				cout << "Saved game to Saved_games.txt." << endl << endl << endl << endl;
 			}
 			else
 				cout << "Failed to open file." << endl;
 			break;
 		}
 		else if (saveInput == "n")
+		{
+			cout << endl << endl << endl;
 			break;
+		}
 		else
 			cout << "Invalid input. Please only type either \"y\" for yes or \"n\" for no" << endl;
 	}
