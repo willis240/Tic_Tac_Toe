@@ -121,7 +121,7 @@ vector<int> getMoveData()
 
 void playbackTurn(int playerNum, vector<char>& board, const int & turnCount, vector<int> & moves)
 {
-	cout << "Hey man! I'm a dummy in playbackTurn!" << endl;
+	cout << "It's Player " << playerNum << "'s turn!" << endl;
 	board[moves[turnCount - 1]] = playerNum;
 }
 
@@ -151,7 +151,7 @@ int winCheck(vector<char>& board)
 	int ii = 0;
 
 	//Horizontal Check
-	for (int i = 0; i < 25; i++)
+	for (int i = 0; i < board.size(); i++)
 	{
 		if (i / 5 == ii)
 			check[i % 5] = board[i];
@@ -169,12 +169,13 @@ int winCheck(vector<char>& board)
 	//Vertical Check
 	for (int j = 0; j < 5; j++)
 	{
-		for (int i = 0; i < 25; i++)
+		for (int i = 0; i < board.size(); i++)
 		{
 			if (i % 5 == j)
 				check[i / 5] = board[i];
-			if (i / 5 == 4)
+			if (i == board.size() - 1)
 			{
+				//cout << int(check[0]) << int(check[1]) << int(check[2]) << int(check[3]) << int(check[4]) << endl;
 				char result = getResult(check);
 				if (result == 1)
 					return 1;

@@ -61,5 +61,4 @@ int main()
 
 	if (choice != 4)
 		askForSave(movesMade);
-
 }
