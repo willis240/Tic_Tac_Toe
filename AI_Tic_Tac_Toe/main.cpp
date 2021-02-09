@@ -2,8 +2,6 @@
 // William Fisher
 // Jan. 26, 2021
 
-//TODO: change playback saving feature so it saves to individual files based on time and date
-
 #include "header.hpp"
 using std::vector;
 using std::cout;

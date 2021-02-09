@@ -9,18 +9,14 @@ using std::vector;
 
 const int maxDepth = 4;
 
-int evalFunc(int & playerNum, vector<char> board)
+void botTurn(int& playerNum, vector<char>& board, vector<int>& movesMade)
 {
-	int points = 0;
+	cout << "It's Player " << playerNum << "'s turn!" << endl;
 
-	// Prioritizes the central column
-	for (int i = 2; i < board.size(); i += 5)
-	{
-		if (board[i] == playerNum)
-			points -= 1;
-	} 
-	
-	return points;
+	int chosenMove = minimax(board, 0, playerNum);
+
+	board[chosenMove] = playerNum;
+	movesMade.push_back(chosenMove);
 }
 
 int minimax(vector<char> & board, int depth, int & playerNum)
@@ -120,12 +116,16 @@ int minSearch(vector<char>& board, int depth, int& playerNum, int & boardsChecke
 		return 10;
 }
 
-void botTurn(int & playerNum, vector<char>& board, vector<int> & movesMade)
+int evalFunc(int& playerNum, vector<char> board)
 {
-	cout << "It's Player " << playerNum << "'s turn!" << endl;
+	int points = 0;
 
-	int chosenMove = minimax(board, 0, playerNum);
-	
-	board[chosenMove] = playerNum;
-	movesMade.push_back(chosenMove);
+	// Prioritizes the central column
+	for (int i = 2; i < board.size(); i += 5)
+	{
+		if (board[i] == playerNum)
+			points -= 1;
+	}
+
+	return points;
 }
