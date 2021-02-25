@@ -261,7 +261,7 @@ int winCheck(vector<char>& board)
 }
 
 void turnOrder(int& playerNum, vector<char>& board, const int & choice, const int& turnCount,
-	vector<int> & movesMade, vector<int> & moves)
+	vector<int> & movesMade, vector<int> & moves, const char & typeAIone, const char & typeAItwo)
 {
 	if (turnCount % 2 == 1)
 	{
@@ -273,14 +273,14 @@ void turnOrder(int& playerNum, vector<char>& board, const int & choice, const in
 	{
 		playerNum = 2;
 		if (choice == 2)
-			botTurn(playerNum, board, movesMade);
+			botTurn(playerNum, board, movesMade, typeAIone, typeAItwo);
 	}
 
 	if (choice == 1)
 		playerTurn(playerNum, board, movesMade);
 	if (choice == 3)
 	{
-		botTurn(playerNum, board, movesMade);
+		botTurn(playerNum, board, movesMade, typeAIone, typeAItwo);
 		cout << "Press enter to continue..." << endl;
 		std::getchar();
 	}

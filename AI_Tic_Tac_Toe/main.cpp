@@ -29,6 +29,19 @@ int main()
 		cout << "5: quit" << endl;
 
 		int choice = selectMode();
+
+		char typeAIone;
+		char typeAItwo;
+		if (choice == 3)
+		{
+			cout << "Please select the algorithm you would like the player 1 AI to utilize." << endl << endl;
+			typeAIone = selectAI();
+		}
+		if (choice == 2 || choice == 3)
+		{
+			cout << "Please select the algorithm you would like the player 2 AI to utilize." << endl << endl;
+			typeAItwo = selectAI();
+		}
 		
 		if (choice == 5)
 			break;
@@ -58,7 +71,7 @@ int main()
 				cout << "No available spaces left. It is a draw." << endl;
 				break;
 			}
-			turnOrder(playerNum, board, choice, turnCount, movesMade, moves);
+			turnOrder(playerNum, board, choice, turnCount, movesMade, moves, typeAIone, typeAItwo);
 			turnCount++;
 		}
 

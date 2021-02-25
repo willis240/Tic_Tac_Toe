@@ -9,11 +9,48 @@ using std::vector;
 
 const int maxDepth = 4;
 
-void botTurn(int& playerNum, vector<char>& board, vector<int>& movesMade)
+char selectAI()
+{
+	cout << "1: The bot uses the Minimax Algorithm to decide its move." << endl;
+	cout << "2: The bot uses the Monte Carlo Tree Search to decide its move." << endl;
+
+	while (true)
+	{
+		int input;
+		std::cin >> input;
+
+		if (!std::cin)
+		{
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			cout << "Invalid input. Please input the number of the AI option you'd like to select." << endl;
+		}
+		else if (input > 0 && input < 3)
+			return input;
+		else
+			cout << "That number does not correspond to any of the available AI options. Please try again." << endl;
+	}
+}
+
+void botTurn(int& playerNum, vector<char>& board, vector<int>& movesMade, const char & typeAIone, const char & typeAItwo)
 {
 	cout << "It's Player " << playerNum << "'s turn!" << endl;
 
-	int chosenMove = minimax(board, 0, playerNum);
+	int chosenMove;
+	if (playerNum == 1)
+	{
+		if (typeAIone == 1)
+			chosenMove = minimax(board, 0, playerNum);
+		else
+			chosenMove = monteCarlo(board, playerNum);
+	}
+	else
+	{
+		if (typeAItwo == 1)
+			chosenMove = minimax(board, 0, playerNum);
+		else
+			chosenMove = monteCarlo(board, playerNum);
+	}
 
 	board[chosenMove] = playerNum;
 	movesMade.push_back(chosenMove);
@@ -128,4 +165,10 @@ int evalFunc(int& playerNum, vector<char> board)
 	}
 
 	return points;
+}
+
+int monteCarlo(vector<char>& board, int& playerNum)
+{
+	cout << "I am the Monte Carlo function! I'm currently a dummy!" << endl;
+	return 5;
 }
