@@ -60,14 +60,14 @@ void botTurn(int& playerNum, vector<char>& board, vector<int>& movesMade, const 
 	if (playerNum == 1)
 	{
 		if (typeAIone == 1)
-			chosenMove = minimax(board, 0, playerNum);
+			chosenMove = minimax(board, 0, playerNum, timeForAI);
 		else
 			chosenMove = monteCarlo(board, playerNum, timeForAI);
 	}
 	else
 	{
 		if (typeAItwo == 1)
-			chosenMove = minimax(board, 0, playerNum);
+			chosenMove = minimax(board, 0, playerNum, timeForAI);
 		else
 			chosenMove = monteCarlo(board, playerNum, timeForAI);
 	}
@@ -76,8 +76,9 @@ void botTurn(int& playerNum, vector<char>& board, vector<int>& movesMade, const 
 	movesMade.push_back(chosenMove);
 }
 
-int minimax(vector<char> & board, int depth, int & playerNum)
+int minimax(vector<char> & board, int depth, int & playerNum, const int & timeForAI)
 {
+	auto start = std::chrono::high_resolution_clock::now();
 	int boardsChecked = 0;
 	int score = std::numeric_limits<int>::max();
 	int chosenMove = 0;
@@ -88,7 +89,7 @@ int minimax(vector<char> & board, int depth, int & playerNum)
 		{
 			board[i] = playerNum;
 
-			int temp = maxSearch(board, depth + 1, playerNum, boardsChecked);
+			int temp = maxSearch(board, depth + 1, playerNum, boardsChecked, timeForAI, start);
 
 			if (temp < score)
 			{
@@ -102,7 +103,8 @@ int minimax(vector<char> & board, int depth, int & playerNum)
 	return chosenMove;
 }
 
-int maxSearch(vector<char> & board, int depth, int & playerNum, int & boardsChecked)
+int maxSearch(vector<char> & board, int depth, int & playerNum, int & boardsChecked,
+	const int & timeForAI, std::chrono::steady_clock::time_point & start)
 {
 	int winStatus = winCheck(board);
 	if (winStatus == playerNum) // current bot wins
@@ -112,8 +114,10 @@ int maxSearch(vector<char> & board, int depth, int & playerNum, int & boardsChec
 	else if (winStatus == 0) // game still ongoing
 	{ 
 		int score = std::numeric_limits<int>::min();
-
-		if (depth == maxDepth)
+		auto end = std::chrono::high_resolution_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+		long timeLimit = timeForAI * 1000000;
+		if (depth == maxDepth || duration.count() > timeLimit)
 		{
 			score = std::max(score, evalFunc(playerNum, board));
 			return score;
@@ -127,7 +131,7 @@ int maxSearch(vector<char> & board, int depth, int & playerNum, int & boardsChec
 					board[i] = 2;
 				else
 					board[i] = 1;
-				score = std::max(score, minSearch(board, depth + 1, playerNum, boardsChecked));
+				score = std::max(score, minSearch(board, depth + 1, playerNum, boardsChecked, timeForAI, start));
 				boardsChecked++;
 				board[i] = 0;
 			}
@@ -139,7 +143,8 @@ int maxSearch(vector<char> & board, int depth, int & playerNum, int & boardsChec
 		return 10;
 }
 
-int minSearch(vector<char>& board, int depth, int& playerNum, int & boardsChecked)
+int minSearch(vector<char>& board, int depth, int& playerNum, int & boardsChecked,
+	const int& timeForAI, std::chrono::steady_clock::time_point& start)
 {
 	int winStatus = winCheck(board);
 	if (winStatus == playerNum) // current bot wins
@@ -149,8 +154,10 @@ int minSearch(vector<char>& board, int depth, int& playerNum, int & boardsChecke
 	else if (winStatus == 0) // game still ongoing
 	{
 		int score = std::numeric_limits<int>::max();
-
-		if (depth == maxDepth)
+		auto end = std::chrono::high_resolution_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+		long timeLimit = timeForAI * 1000000;
+		if (depth == maxDepth || duration.count() > timeLimit)
 		{
 			score = std::min(score, evalFunc(playerNum, board));
 			return score;
@@ -161,7 +168,7 @@ int minSearch(vector<char>& board, int depth, int& playerNum, int & boardsChecke
 			if (board[i] == 0)
 			{
 				board[i] = playerNum;
-				score = std::min(score, maxSearch(board, depth + 1, playerNum, boardsChecked));
+				score = std::min(score, maxSearch(board, depth + 1, playerNum, boardsChecked, timeForAI, start));
 				boardsChecked++;
 				board[i] = 0;
 			}

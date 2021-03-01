@@ -35,9 +35,11 @@ char selectAI();
 int selectTime();
 void botTurn(int& playerNum, std::vector<char>& board, std::vector<int>& movesMade,
     const char & typeAIone, const char & typeAItwo, const int& timeForAI);
-int minimax(std::vector<char> & board, int depth, int & playerNum);
-int maxSearch(std::vector<char> & board, int depth, int& playerNum, int & boardsChecked);
-int minSearch(std::vector<char>& board, int depth, int& playerNum, int & boardsChecked);
+int minimax(std::vector<char> & board, int depth, int & playerNum, const int& timeForAI);
+int maxSearch(std::vector<char> & board, int depth, int& playerNum, int & boardsChecked, const int& timeForAI,
+    std::chrono::steady_clock::time_point& start);
+int minSearch(std::vector<char>& board, int depth, int& playerNum, int & boardsChecked, const int& timeForAI,
+    std::chrono::steady_clock::time_point& start);
 int evalFunc(int& playerNum, std::vector<char> board);
 int monteCarlo(std::vector<char>& board, int& playerNum, const int& timeForAI);
 
