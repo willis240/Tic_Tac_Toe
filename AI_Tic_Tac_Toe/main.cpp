@@ -32,7 +32,7 @@ int main()
 
 		char typeAIone;
 		char typeAItwo;
-		int timeForAI;
+		int timeLimit = 0;
 		if (choice == 3)
 		{
 			cout << "Please select the algorithm you would like the player 1 bot to utilize." << endl << endl;
@@ -43,8 +43,9 @@ int main()
 			cout << "Please select the algorithm you would like the player 2 bot to utilize." << endl << endl;
 			typeAItwo = selectAI();
 			cout << "How many seconds would you like the bot(s) to have for their turns?" << endl << endl;
-			timeForAI = selectTime();
+			timeLimit = selectTime();
 		}
+		long timeForAI = timeLimit * 1000000;
 		
 		if (choice == 5)
 			break;

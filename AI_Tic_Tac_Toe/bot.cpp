@@ -116,8 +116,7 @@ int maxSearch(vector<char> & board, int depth, int & playerNum, int & boardsChec
 		int score = std::numeric_limits<int>::min();
 		auto end = std::chrono::high_resolution_clock::now();
 		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-		long timeLimit = timeForAI * 1000000;
-		if (depth == maxDepth || duration.count() > timeLimit)
+		if (depth == maxDepth || duration.count() > timeForAI)
 		{
 			score = std::max(score, evalFunc(playerNum, board));
 			return score;
@@ -156,8 +155,7 @@ int minSearch(vector<char>& board, int depth, int& playerNum, int & boardsChecke
 		int score = std::numeric_limits<int>::max();
 		auto end = std::chrono::high_resolution_clock::now();
 		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-		long timeLimit = timeForAI * 1000000;
-		if (depth == maxDepth || duration.count() > timeLimit)
+		if (depth == maxDepth || duration.count() > timeForAI)
 		{
 			score = std::min(score, evalFunc(playerNum, board));
 			return score;
@@ -201,8 +199,7 @@ int monteCarlo(vector<char>& board, int& playerNum, const int & timeForAI)
 	auto start = std::chrono::high_resolution_clock::now();
 	auto end = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds > (end - start);
-	long timeLimit = timeForAI * 1000000;
-	while (duration.count() < timeLimit)
+	while (duration.count() < timeForAI)
 	{
 		start = std::chrono::high_resolution_clock::now();
 
