@@ -100,6 +100,7 @@ int minimax(vector<char> & board, int depth, int & playerNum, const int & timeFo
 		}
 	}
 	cout << "Boards processed: " << boardsChecked << endl;
+	cout << "Boards/sec: " << boardsChecked / (timeForAI / 1000000) << endl;
 	return chosenMove;
 }
 
