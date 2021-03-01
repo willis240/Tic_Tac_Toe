@@ -32,15 +32,18 @@ int main()
 
 		char typeAIone;
 		char typeAItwo;
+		int timeForAI;
 		if (choice == 3)
 		{
-			cout << "Please select the algorithm you would like the player 1 AI to utilize." << endl << endl;
+			cout << "Please select the algorithm you would like the player 1 bot to utilize." << endl << endl;
 			typeAIone = selectAI();
 		}
 		if (choice == 2 || choice == 3)
 		{
-			cout << "Please select the algorithm you would like the player 2 AI to utilize." << endl << endl;
+			cout << "Please select the algorithm you would like the player 2 bot to utilize." << endl << endl;
 			typeAItwo = selectAI();
+			cout << "How many seconds would you like the bot(s) to have for their turns?" << endl << endl;
+			timeForAI = selectTime();
 		}
 		
 		if (choice == 5)
@@ -71,7 +74,7 @@ int main()
 				cout << "No available spaces left. It is a draw." << endl;
 				break;
 			}
-			turnOrder(playerNum, board, choice, turnCount, movesMade, moves, typeAIone, typeAItwo);
+			turnOrder(playerNum, board, choice, turnCount, movesMade, moves, typeAIone, typeAItwo, timeForAI);
 			turnCount++;
 		}
 

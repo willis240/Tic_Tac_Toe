@@ -32,7 +32,27 @@ char selectAI()
 	}
 }
 
-void botTurn(int& playerNum, vector<char>& board, vector<int>& movesMade, const char & typeAIone, const char & typeAItwo)
+int selectTime()
+{
+	while (true)
+	{
+		int input;
+		std::cin >> input;
+
+		if (!std::cin)
+		{
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			cout << "Invalid input. Please input an integer for how many seconds you'd like the bot(s)";
+			cout << "to have for their turn(s)." << endl;
+		}
+		else
+			return input;
+	}
+}
+
+void botTurn(int& playerNum, vector<char>& board, vector<int>& movesMade, const char & typeAIone, const char & typeAItwo,
+	const int & timeForAI)
 {
 	cout << "It's Player " << playerNum << "'s turn!" << endl;
 
@@ -42,14 +62,14 @@ void botTurn(int& playerNum, vector<char>& board, vector<int>& movesMade, const 
 		if (typeAIone == 1)
 			chosenMove = minimax(board, 0, playerNum);
 		else
-			chosenMove = monteCarlo(board, playerNum);
+			chosenMove = monteCarlo(board, playerNum, timeForAI);
 	}
 	else
 	{
 		if (typeAItwo == 1)
 			chosenMove = minimax(board, 0, playerNum);
 		else
-			chosenMove = monteCarlo(board, playerNum);
+			chosenMove = monteCarlo(board, playerNum, timeForAI);
 	}
 
 	board[chosenMove] = playerNum;
@@ -167,8 +187,23 @@ int evalFunc(int& playerNum, vector<char> board)
 	return points;
 }
 
-int monteCarlo(vector<char>& board, int& playerNum)
+int monteCarlo(vector<char>& board, int& playerNum, const int & timeForAI)
 {
 	cout << "I am the Monte Carlo function! I'm currently a dummy!" << endl;
+
+	auto start = std::chrono::high_resolution_clock::now();
+	auto end = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::microseconds > (end - start);
+	long timeLimit = timeForAI * 1000000;
+	while (duration.count() < timeLimit)
+	{
+		start = std::chrono::high_resolution_clock::now();
+
+		// This cout simply gives the computer something to do while incrementing time
+		cout << "filler" << endl;
+
+		end = std::chrono::high_resolution_clock::now();
+		duration += std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+	}
 	return 5;
 }
