@@ -199,16 +199,29 @@ int monteCarlo(vector<char>& board, int& playerNum, const int & timeForAI)
 
 	auto start = std::chrono::high_resolution_clock::now();
 	auto end = std::chrono::high_resolution_clock::now();
-	auto duration = std::chrono::duration_cast<std::chrono::microseconds > (end - start);
+	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+
+	//initial random move
+	vector<char> availableMoves;
+	for (int i = 0; i < board.size(); i++)
+	{
+		if (board[i] == 0)
+			availableMoves.push_back(i);
+	}
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_int_distribution<int> dist(0, availableMoves.size());
+	int randomMove = int(availableMoves[dist(mt)]);
+
 	while (duration.count() < timeForAI)
 	{
 		start = std::chrono::high_resolution_clock::now();
 
-		// This cout simply gives the computer something to do while incrementing time
-		cout << "filler" << endl;
+		// cout lets time happen between start and end
+		cout << randomMove << endl;
 
 		end = std::chrono::high_resolution_clock::now();
 		duration += std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 	}
-	return 5;
+	return randomMove;
 }
