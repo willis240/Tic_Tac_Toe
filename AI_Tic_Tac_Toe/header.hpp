@@ -22,17 +22,15 @@ class Node {
 public:
     int moveMade;
     int wins = 1;
-    int trials = 7;
-    Node* parent;
+    int trials = 1;
+  
     std::vector<Node*> children;
 
-    Node() { moveMade = NULL; parent = nullptr; };
+    Node() { moveMade = NULL; };
 
-    Node(int move, Node* parentNode, int sims)
+    Node(int move)
     {
         moveMade = move;
-        parent = parentNode;
-        trials = sims;
     }
 
 };

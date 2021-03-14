@@ -4,6 +4,6 @@ C:\Users\Wilhelm\source\repos\AI_Tic_Tac_Toe\AI_Tic_Tac_Toe\bot.cpp(127,21): war
 C:\Users\Wilhelm\source\repos\AI_Tic_Tac_Toe\AI_Tic_Tac_Toe\bot.cpp(166,21): warning C4018: '<': signed/unsigned mismatch
 C:\Users\Wilhelm\source\repos\AI_Tic_Tac_Toe\AI_Tic_Tac_Toe\bot.cpp(188,20): warning C4018: '<': signed/unsigned mismatch
 C:\Users\Wilhelm\source\repos\AI_Tic_Tac_Toe\AI_Tic_Tac_Toe\bot.cpp(209,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Wilhelm\source\repos\AI_Tic_Tac_Toe\AI_Tic_Tac_Toe\bot.cpp(252,23): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\Wilhelm\source\repos\AI_Tic_Tac_Toe\AI_Tic_Tac_Toe\bot.cpp(284,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Wilhelm\source\repos\AI_Tic_Tac_Toe\AI_Tic_Tac_Toe\bot.cpp(245,23): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Wilhelm\source\repos\AI_Tic_Tac_Toe\AI_Tic_Tac_Toe\bot.cpp(276,22): warning C4018: '<': signed/unsigned mismatch
   AI_Tic_Tac_Toe.vcxproj -> C:\Users\Wilhelm\source\repos\AI_Tic_Tac_Toe\Debug\AI_Tic_Tac_Toe.exe
