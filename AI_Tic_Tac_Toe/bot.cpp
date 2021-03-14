@@ -6,6 +6,7 @@
 using std::cout;
 using std::endl;
 using std::vector;
+using std::queue;
 
 const int maxDepth = 4;
 
@@ -193,6 +194,7 @@ int evalFunc(int& playerNum, vector<char> board)
 	return points;
 }
 
+int simulations = 0;
 int monteCarlo(vector<char>& board, int& playerNum, const int & timeForAI)
 {
 	cout << "I am the Monte Carlo function! I'm currently a dummy!" << endl;
@@ -200,6 +202,7 @@ int monteCarlo(vector<char>& board, int& playerNum, const int & timeForAI)
 	auto start = std::chrono::high_resolution_clock::now();
 	auto end = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+	simulations = 0;
 
 	//initial random move
 	vector<char> availableMoves;
@@ -208,20 +211,93 @@ int monteCarlo(vector<char>& board, int& playerNum, const int & timeForAI)
 		if (board[i] == 0)
 			availableMoves.push_back(i);
 	}
+
+	//THIS IS IN PLACE OF INITIAL ROLLOUT, REPLACE WITH ROLLOUT!!!!!!!!!!!!!
 	std::random_device rd;
 	std::mt19937 mt(rd());
 	std::uniform_int_distribution<int> dist(0, availableMoves.size());
 	int randomMove = int(availableMoves[dist(mt)]);
+	simulations++;
 
-	while (duration.count() < timeForAI)
-	{
+	//while (duration.count() < timeForAI)
+	//{
 		start = std::chrono::high_resolution_clock::now();
 
 		// cout lets time happen between start and end
 		cout << randomMove << endl;
 
+		Node * root = new Node();
+		//theoretical code that will likely become real code once data structure is locked down
+		Node * node = bestUCT(root);
+		cout << node->moveMade << endl;
+		//rollout(node, availableMoves);
+		//updateStats(node);
+		simulations++;
+
 		end = std::chrono::high_resolution_clock::now();
 		duration += std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-	}
+	//}
 	return randomMove;
+}
+
+//uses UCT equation to find & return node with the highest UCT
+Node * bestUCT(Node * root)
+{
+	//iterate through nodes
+	//calculate each one's UCT using its wins and total trials (with a constant of 1.5)
+	//only replace the variable which will be the return value when a UCT is greater than its current one
+	double bestUCT = 0.0;
+	double tempUCT = 0.0;
+	Node* bestNode = root;
+	const int constant = 1.5;
+
+	queue<Node*> q;
+	q.push(root);
+
+	//Makes a tree for testing. REMOVE LATER!!!!!!!!!!!!!!!!!!!!!!!!!
+	(root->children).push_back(new Node(2, root, 3));
+	(root->children).push_back(new Node(3, root, 3));
+	(root->children[0]->children).push_back(new Node(4, root->children[0], 3));
+	(root->children[0]->children[0]->children).push_back(new Node(7, root->children[0]->children[0], 3));
+	(root->children[0]->children[0]->children[0]->children).push_back(new Node(9, root->children[0]->children[0]->children[0], 2));
+	(root->children[1]->children).push_back(new Node(10, root->children[1], 5));
+	(root->children[1]->children[0]->children).push_back(new Node(12, root->children[1]->children[0], 5));
+
+	while (!q.empty())
+	{
+		int n = q.size();
+		while (n > 0)
+		{
+			Node* p = q.front();
+			q.pop();
+
+			tempUCT = (double(p->wins) / double(p->trials)) + constant * std::sqrt(log(double(simulations)) / double(p->trials));
+			cout << tempUCT << endl;
+
+			if (bestUCT < tempUCT)
+			{
+				bestUCT = tempUCT;
+				cout << bestUCT << endl;
+				bestNode = p;
+			}
+
+			for (int i = 0; i < p->children.size(); i++)
+				q.push(p->children[i]);
+			n--;
+		}
+	}
+	return (bestNode);
+}
+
+//traverses down a path of the tree using random choices for both self and opponent
+void rollout(Node & node, vector<char>& availableMoves)
+{
+
+}
+
+//traverses back up through the path of the tree, updating wins / trials for each node along the path
+//note that each odd-depth node is an opponent's node, and should have losses where self's have wins
+void updateStats(Node & node)
+{
+
 }

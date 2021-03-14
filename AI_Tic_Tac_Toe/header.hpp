@@ -8,12 +8,34 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <vector>
+#include <queue>
 #include <fstream>
 #include <string>
 #include <random>
 #include <algorithm>
 #include <time.h>
 #include <chrono>
+#include <math.h>
+
+class Node {
+
+public:
+    int moveMade;
+    int wins = 1;
+    int trials = 7;
+    Node* parent;
+    std::vector<Node*> children;
+
+    Node() { moveMade = NULL; parent = nullptr; };
+
+    Node(int move, Node* parentNode, int sims)
+    {
+        moveMade = move;
+        parent = parentNode;
+        trials = sims;
+    }
+
+};
 
 // tic_tac_toe.cpp
 int selectMode();
@@ -42,5 +64,6 @@ int minSearch(std::vector<char>& board, int depth, int& playerNum, int & boardsC
     std::chrono::steady_clock::time_point& start);
 int evalFunc(int& playerNum, std::vector<char> board);
 int monteCarlo(std::vector<char>& board, int& playerNum, const int& timeForAI);
+Node* bestUCT(Node* root);
 
 #endif
