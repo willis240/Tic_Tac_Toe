@@ -57,7 +57,7 @@ int minSearch(std::vector<char>& board, int depth, int& playerNum, int & boardsC
     std::chrono::steady_clock::time_point& start);
 int evalFunc(int& playerNum, std::vector<char> board);
 int monteCarlo(std::vector<char>& board, int& playerNum, const int& timeForAI, const std::vector<int> & movesMade);
-bool findBestUCT(Node& root);
-bool rollout(Node& node);
+bool findBestUCT(Node& root, int& boardsChecked);
+bool rollout(Node& node, int& boardsChecked);
 
 #endif

@@ -198,8 +198,7 @@ int simulations = 0;
 Node root;
 int monteCarlo(vector<char>& board, int& playerNum, const int & timeForAI, const vector<int> & movesMade)
 {
-	cout << "I am the Monte Carlo function! I'm currently a dummy!" << endl;
-
+	int boardsChecked = 0;
 	bool turn = true;
 	if (playerNum == 2)
 		turn = false;
@@ -226,11 +225,13 @@ int monteCarlo(vector<char>& board, int& playerNum, const int & timeForAI, const
 		simulations = 0;
 	}
 
+	//Primary loop of the MCTS;
+	//Finds node with best UCT then performs rollout and backpropagation
 	while (duration.count() < timeForAI)
 	{
 		start = std::chrono::high_resolution_clock::now();
 		
-		findBestUCT(root);
+		findBestUCT(root, boardsChecked);
 
 		end = std::chrono::high_resolution_clock::now();
 		duration += std::chrono::duration_cast<std::chrono::microseconds>(end - start);
@@ -254,7 +255,12 @@ int monteCarlo(vector<char>& board, int& playerNum, const int & timeForAI, const
 			for (int i = 0; i < board.size(); i++)
 			{
 				if (board[i] != root.board[i])
+				{
+					cout << "Boards checked: " << boardsChecked << endl;
+					cout << "Boards/sec: " << boardsChecked / (timeForAI / 1000000) << endl;
+					cout << "Move made: " << i << endl;
 					return i;
+				}
 			}
 		}
 	}
@@ -263,7 +269,7 @@ int monteCarlo(vector<char>& board, int& playerNum, const int & timeForAI, const
 
 const float constant = 1.5;
 //uses UCT equation to find & return node with the highest UCT
-bool findBestUCT(Node & node)
+bool findBestUCT(Node & node, int & boardsChecked)
 {
 	bool result = false;
 
@@ -276,14 +282,14 @@ bool findBestUCT(Node & node)
 	}
 
 	if (bestUCT == node.uct)
-		result = rollout(node);
+		result = rollout(node, boardsChecked);
 	else
 	{
 		for (auto& a : node.children)
 		{
 			if (bestUCT == a.uct)
 			{
-				result = findBestUCT(a);
+				result = findBestUCT(a, boardsChecked);
 				break;
 			}
 		}
@@ -298,7 +304,7 @@ bool findBestUCT(Node & node)
 }
 
 //traverses down a path of the tree using random choices for both self and opponent
-bool rollout(Node & node)
+bool rollout(Node & node, int & boardsChecked)
 {
 	simulations++;
 
@@ -331,25 +337,22 @@ bool rollout(Node & node)
 	}
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> randval(0, availableMoves.size() - 1);
-	
-	int firstRand = randval(gen);
-	newBoard[firstRand] = simTurn;
-	availableMoves.erase(std::remove(availableMoves.begin(), availableMoves.end(), firstRand), availableMoves.end());
-	std::uniform_int_distribution<int> randval2(0, availableMoves.size() - 1);
-
-	/*while (flag)
+	if (winCheck(newBoard) == 0)
 	{
-		newBoard = node.board;
-		newBoard[randval(gen)] = simTurn;
-		flag = false;
-		for (const auto& a : node.children)
+		int firstRand;
+		if (availableMoves.size() > 1)
 		{
-			if (a.board == newBoard)
-				flag = true;
+			std::uniform_int_distribution<int> randval(0, availableMoves.size() - 1);
+			firstRand = randval(gen);
 		}
-	}*/
-
+		else
+		{
+			firstRand = 0;
+		}
+		int firstRandMove = availableMoves[firstRand];
+		newBoard[firstRandMove] = simTurn;
+		availableMoves.erase(std::remove(availableMoves.begin(), availableMoves.end(), firstRandMove), availableMoves.end());
+	}
 	Node tempNode(newBoard, 0, 1, 0, !(node.turn));
 	vector<char> boardWorking = newBoard;
 	bool turnWorking = !(node.turn);
@@ -363,8 +366,34 @@ bool rollout(Node & node)
 		else
 			moveTest = 1;
 
-		int secondRand = randval2(gen);
-		boardWorking[secondRand] = moveTest;
+		int secondRand;
+		int secondRandMove = 0;
+		if (availableMoves.size() > 1)
+		{
+			std::uniform_int_distribution<int> randval(0, availableMoves.size() - 1);
+			secondRand = randval(gen);
+			secondRandMove = availableMoves[secondRand];
+			availableMoves.erase(std::remove(availableMoves.begin(), availableMoves.end(), secondRandMove), availableMoves.end());
+		}
+		else if (availableMoves.size() == 1)
+		{
+			secondRand = 0;
+			secondRandMove = availableMoves[secondRand];
+			availableMoves.erase(std::remove(availableMoves.begin(), availableMoves.end(), secondRandMove), availableMoves.end());
+		}
+		else
+		{
+			for (int i = 0; i < boardWorking.size(); i++)
+			{
+				if (boardWorking[i] == 0)
+					secondRandMove = i;
+			}
+		}
+
+		boardWorking[secondRandMove] = moveTest;
+		turnWorking = !turnWorking;
+		
+		boardsChecked++;
 	}
 
 	if (node.turn != turnWorking)
