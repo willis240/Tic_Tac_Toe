@@ -258,7 +258,6 @@ int monteCarlo(vector<char>& board, int& playerNum, const int & timeForAI, const
 				{
 					cout << "Boards checked: " << boardsChecked << endl;
 					cout << "Boards/sec: " << boardsChecked / (timeForAI / 1000000) << endl;
-					cout << "Move made: " << i << endl;
 					return i;
 				}
 			}
