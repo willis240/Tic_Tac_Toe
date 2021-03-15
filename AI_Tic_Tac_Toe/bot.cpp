@@ -63,14 +63,14 @@ void botTurn(int& playerNum, vector<char>& board, vector<int>& movesMade, const 
 		if (typeAIone == 1)
 			chosenMove = minimax(board, 0, playerNum, timeForAI);
 		else
-			chosenMove = monteCarlo(board, playerNum, timeForAI);
+			chosenMove = monteCarlo(board, playerNum, timeForAI, movesMade);
 	}
 	else
 	{
 		if (typeAItwo == 1)
 			chosenMove = minimax(board, 0, playerNum, timeForAI);
 		else
-			chosenMove = monteCarlo(board, playerNum, timeForAI);
+			chosenMove = monteCarlo(board, playerNum, timeForAI, movesMade);
 	}
 
 	board[chosenMove] = playerNum;
@@ -195,101 +195,183 @@ int evalFunc(int& playerNum, vector<char> board)
 }
 
 int simulations = 0;
-int monteCarlo(vector<char>& board, int& playerNum, const int & timeForAI)
+Node root;
+int monteCarlo(vector<char>& board, int& playerNum, const int & timeForAI, const vector<int> & movesMade)
 {
 	cout << "I am the Monte Carlo function! I'm currently a dummy!" << endl;
+
+	bool turn = true;
+	if (playerNum == 2)
+		turn = false;
 
 	auto start = std::chrono::high_resolution_clock::now();
 	auto end = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-	simulations = 0;
-
-	//initial random move
-	vector<char> availableMoves;
-	for (int i = 0; i < board.size(); i++)
+	
+	bool flag = true;
+	for (const auto& a : root.children)
 	{
-		if (board[i] == 0)
-			availableMoves.push_back(i);
+		if (a.board == board)
+		{
+			root = a;
+			simulations = a.sims;
+			flag = false;
+			break;
+		}
 	}
 
-	//THIS IS IN PLACE OF INITIAL ROLLOUT, REPLACE WITH ROLLOUT!!!!!!!!!!!!!
-	std::random_device rd;
-	std::mt19937 mt(rd());
-	std::uniform_int_distribution<int> dist(0, availableMoves.size());
-	int randomMove = int(availableMoves[dist(mt)]);
-	simulations++;
+	if (flag)
+	{
+		root = Node(board, 0, 0, 0, turn);
+		simulations = 0;
+	}
 
-	//while (duration.count() < timeForAI)
-	//{
+	while (duration.count() < timeForAI)
+	{
 		start = std::chrono::high_resolution_clock::now();
-
-		Node * root = new Node();
-		//theoretical code that will likely become real code once data structure is locked down
-		Node * node = bestUCT(root);
-		//rollout(node, availableMoves);
-		//updateStats(node);
-		simulations++;
+		
+		findBestUCT(root);
 
 		end = std::chrono::high_resolution_clock::now();
 		duration += std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-	//}
-	return randomMove;
-}
+	}
 
-//uses UCT equation to find & return node with the highest UCT
-Node * bestUCT(Node * root)
-{
-	double bestUCT = 0.0;
-	double tempUCT = 0.0;
-	Node* bestNode = root;
-	const int constant = 1.5;
-
-	queue<Node*> q;
-	q.push(root);
-
-	//Makes a tree for testing. REMOVE LATER!!!!!!!!!!!!!!!!!!!!!!!!!
-	(root->children).push_back(new Node(2));
-	(root->children).push_back(new Node(3));
-	(root->children[0]->children).push_back(new Node(4));
-	(root->children[0]->children[0]->children).push_back(new Node(7));
-	(root->children[0]->children[0]->children[0]->children).push_back(new Node(9));
-	(root->children[1]->children).push_back(new Node(10));
-	(root->children[1]->children[0]->children).push_back(new Node(12));
-
-	//iterates through a queue containing all the nodes
-	while (!q.empty())
+	float highestUCT = 0.0;
+	for (const auto& a : root.children)
 	{
-		int n = q.size();
-		while (n > 0)
+		if (a.uct > highestUCT)
+			highestUCT = a.uct;
+	}
+
+	for (const auto& a : root.children)
+	{
+		if (highestUCT == a.uct)
 		{
-			Node* p = q.front();
-			q.pop();
+			root = a;
+			simulations = a.sims;
 
-			tempUCT = (double(p->wins) / double(p->trials)) + constant * std::sqrt(log(double(simulations)) / double(p->trials));
-
-			if (bestUCT < tempUCT)
+			//checks for the move made by the node with the best UCT, then returns it
+			for (int i = 0; i < board.size(); i++)
 			{
-				bestUCT = tempUCT;
-				bestNode = p;
+				if (board[i] != root.board[i])
+					return i;
 			}
-
-			for (int i = 0; i < p->children.size(); i++)
-				q.push(p->children[i]);
-			n--;
 		}
 	}
-	return (bestNode);
+
+}
+
+const float constant = 1.5;
+//uses UCT equation to find & return node with the highest UCT
+bool findBestUCT(Node & node)
+{
+	bool result = false;
+
+	float bestUCT = node.uct;
+
+	for (const auto& a : node.children)
+	{
+		if (a.uct > bestUCT)
+			bestUCT = a.uct;
+	}
+
+	if (bestUCT == node.uct)
+		result = rollout(node);
+	else
+	{
+		for (auto& a : node.children)
+		{
+			if (bestUCT == a.uct)
+			{
+				result = findBestUCT(a);
+				break;
+			}
+		}
+	}
+
+	if (result == node.turn)
+		node.wins++;
+	node.sims++;
+
+	node.uct = ((double)node.wins / (double)node.sims) + constant * sqrt(log(double(simulations)) / double(node.sims));
+	return result;
 }
 
 //traverses down a path of the tree using random choices for both self and opponent
-void rollout(Node & node, vector<char>& availableMoves)
+bool rollout(Node & node)
 {
+	simulations++;
 
-}
+	int simTurn;
+	if (node.turn)
+		simTurn = 2;
+	else
+		simTurn = 1;
 
-//traverses back up through the path of the tree, updating wins / trials for each node along the path
-//note that each odd-depth node is an opponent's node, and should have losses where self's have wins
-void updateStats(Node & node)
-{
+	bool flag = true;
 
+	vector<char> newBoard = node.board;
+	vector<char> availableMoves;
+	for (int i = 0; i < newBoard.size(); i++)
+	{
+		if (newBoard[i] == 0)
+			availableMoves.push_back(i);
+	}
+
+	//Remove children's moves from availableMoves
+	for (const auto& a : node.children)
+	{
+		for (int i = 0; i < a.board.size(); i++)
+		{
+			if (newBoard[i] != a.board[i])
+			{
+				availableMoves.erase(std::remove(availableMoves.begin(), availableMoves.end(), i), availableMoves.end());
+			}
+		}
+	}
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> randval(0, availableMoves.size() - 1);
+	
+	int firstRand = randval(gen);
+	newBoard[firstRand] = simTurn;
+	availableMoves.erase(std::remove(availableMoves.begin(), availableMoves.end(), firstRand), availableMoves.end());
+	std::uniform_int_distribution<int> randval2(0, availableMoves.size() - 1);
+
+	/*while (flag)
+	{
+		newBoard = node.board;
+		newBoard[randval(gen)] = simTurn;
+		flag = false;
+		for (const auto& a : node.children)
+		{
+			if (a.board == newBoard)
+				flag = true;
+		}
+	}*/
+
+	Node tempNode(newBoard, 0, 1, 0, !(node.turn));
+	vector<char> boardWorking = newBoard;
+	bool turnWorking = !(node.turn);
+	int counter = 0;
+
+	if (winCheck(boardWorking) == 0)
+	{
+		int moveTest;
+		if (turnWorking)
+			moveTest = 2;
+		else
+			moveTest = 1;
+
+		int secondRand = randval2(gen);
+		boardWorking[secondRand] = moveTest;
+	}
+
+	if (node.turn != turnWorking)
+		tempNode.wins++;
+
+	tempNode.uct = ((double)tempNode.wins / (double)tempNode.sims) + constant * sqrt(log((double)simulations) / (double)tempNode.sims);
+	node.children.push_back(tempNode);
+
+	return turnWorking;
 }

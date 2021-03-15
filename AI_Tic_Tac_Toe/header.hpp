@@ -17,22 +17,17 @@
 #include <chrono>
 #include <math.h>
 
-class Node {
+struct Node {
+    std::vector<char> board;
+    int wins;
+    int sims;
+    float uct;
+    bool turn;
+    std::vector<Node> children;
 
-public:
-    int moveMade;
-    int wins = 1;
-    int trials = 1;
-  
-    std::vector<Node*> children;
-
-    Node() { moveMade = NULL; };
-
-    Node(int move)
-    {
-        moveMade = move;
-    }
-
+    Node() : board(25, 0), wins(0), sims(0), uct(0), turn(false) {};
+    Node(std::vector<char> boardInput, int winsInput, int simsInput, float uctInput, bool turnInput) :
+        board(boardInput), wins(winsInput), sims(simsInput), uct(uctInput), turn(turnInput) {};
 };
 
 // tic_tac_toe.cpp
@@ -61,7 +56,8 @@ int maxSearch(std::vector<char> & board, int depth, int& playerNum, int & boards
 int minSearch(std::vector<char>& board, int depth, int& playerNum, int & boardsChecked, const int& timeForAI,
     std::chrono::steady_clock::time_point& start);
 int evalFunc(int& playerNum, std::vector<char> board);
-int monteCarlo(std::vector<char>& board, int& playerNum, const int& timeForAI);
-Node* bestUCT(Node* root);
+int monteCarlo(std::vector<char>& board, int& playerNum, const int& timeForAI, const std::vector<int> & movesMade);
+bool findBestUCT(Node& root);
+bool rollout(Node& node);
 
 #endif
