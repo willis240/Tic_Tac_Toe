@@ -77,9 +77,12 @@ void botTurn(int& playerNum, vector<char>& board, vector<int>& movesMade, const 
 	movesMade.push_back(chosenMove);
 }
 
+auto start = std::chrono::high_resolution_clock::now();
+auto stop = std::chrono::high_resolution_clock::now();
+auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
 int minimax(vector<char> & board, int depth, int & playerNum, const int & timeForAI)
 {
-	auto start = std::chrono::high_resolution_clock::now();
+	start = std::chrono::high_resolution_clock::now();
 	int boardsChecked = 0;
 	int score = std::numeric_limits<int>::max();
 	int chosenMove = 0;
@@ -101,7 +104,7 @@ int minimax(vector<char> & board, int depth, int & playerNum, const int & timeFo
 		}
 	}
 	cout << "Boards processed: " << boardsChecked << endl;
-	cout << "Boards/sec: " << boardsChecked / (timeForAI / 1000000) << endl;
+	cout << "Boards/sec: " << boardsChecked / (duration.count() / 1000000) << endl;
 	return chosenMove;
 }
 
@@ -116,8 +119,8 @@ int maxSearch(vector<char> & board, int depth, int & playerNum, int & boardsChec
 	else if (winStatus == 0) // game still ongoing
 	{ 
 		int score = std::numeric_limits<int>::min();
-		auto end = std::chrono::high_resolution_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+		stop = std::chrono::high_resolution_clock::now();
+		duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
 		if (depth == maxDepth || duration.count() > timeForAI)
 		{
 			score = std::max(score, evalFunc(playerNum, board));
@@ -155,8 +158,8 @@ int minSearch(vector<char>& board, int depth, int& playerNum, int & boardsChecke
 	else if (winStatus == 0) // game still ongoing
 	{
 		int score = std::numeric_limits<int>::max();
-		auto end = std::chrono::high_resolution_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+		stop = std::chrono::high_resolution_clock::now();
+		duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
 		if (depth == maxDepth || duration.count() > timeForAI)
 		{
 			score = std::min(score, evalFunc(playerNum, board));
@@ -203,9 +206,9 @@ int monteCarlo(vector<char>& board, int& playerNum, const int & timeForAI, const
 	if (playerNum == 2)
 		turn = false;
 
-	auto start = std::chrono::high_resolution_clock::now();
+	auto begin = std::chrono::high_resolution_clock::now();
 	auto end = std::chrono::high_resolution_clock::now();
-	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+	auto timeElapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
 	
 	bool flag = true;
 	for (const auto& a : root.children)
@@ -227,14 +230,14 @@ int monteCarlo(vector<char>& board, int& playerNum, const int & timeForAI, const
 
 	//Primary loop of the MCTS;
 	//Finds node with best UCT then performs rollout and backpropagation
-	while (duration.count() < timeForAI)
+	while (timeElapsed.count() < timeForAI)
 	{
-		start = std::chrono::high_resolution_clock::now();
+		begin = std::chrono::high_resolution_clock::now();
 		
 		findBestUCT(root, boardsChecked);
 
 		end = std::chrono::high_resolution_clock::now();
-		duration += std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+		timeElapsed += std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
 	}
 
 	float highestUCT = 0.0;
